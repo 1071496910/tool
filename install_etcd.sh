@@ -86,6 +86,7 @@ EOF
 }
 
 function main(){
+    downloadETCD
     cluster_str=$(clusterStr)
     
     for i in "${!names[@]}"; 
@@ -93,6 +94,8 @@ function main(){
         name=${names[$i]}
         ip=${ips[$i]}
         etcdService
+        scp /tmp/etcd-download-test/etcd $ip:/usr/bin/etcd
+        scp /tmp/etcd-download-test/etcdctl $ip:/usr/bin/etcdctl
         scp etcd${ip}.service $ip:/usr/lib/systemd/system/etcd.service
         ssh $ip systemctl enable etcd.service
         ssh $ip systemctl start etcd.service
